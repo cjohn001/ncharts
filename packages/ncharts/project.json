@@ -66,6 +66,12 @@
       "options": {
         "lintFilePatterns": ["packages/ncharts/**/*.ts"]
       }
+    },
+    "test": {
+      "executor": "@nx/vitest:test",
+      "options": {
+        "configFile": "packages/ncharts/vite.config.ts"
+      }
     }
   },
   "tags": []

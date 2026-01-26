@@ -4,6 +4,6 @@
     "outDir": "../../dist/out-tsc",
     "rootDir": "."
   },
-  "exclude": ["**/*.spec.ts", "**/*.test.ts", "angular", "nativescript.config.ts"],
+  "exclude": ["**/*.spec.ts", "**/*.test.ts", "angular", "nativescript.config.ts", "vite.config.ts"],
   "include": ["**/*.ts", "references.d.ts"]
 }

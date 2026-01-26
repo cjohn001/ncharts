@@ -1,5 +1,3 @@
-# @nstudio/ncharts
-
 Native iOS/Android charting for NativeScript using [DGCharts](https://github.com/ChartsOrg/Charts) (iOS) and [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart) (Android).
 
 ## Features

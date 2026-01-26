@@ -4,6 +4,10 @@ Native iOS/Android charting for NativeScript using [DGCharts](https://github.com
 
 Line, Bar, Pie, Scatter, Bubble, CandleStick, Radar, and Combined charts with full customization.
 
+[![ncharts Preview](ncharts-preview.png)](https://www.youtube.com/watch?v=5ghk9R0SW8w)
+
+Tap image to watch it in action.
+
 ## Installation
 
 ```bash
