@@ -4,9 +4,11 @@
 import { parseColor } from '../common';
 import type { ChartColor } from '../types';
 
-// ============================================================================
-// Color Conversion Utilities
-// ============================================================================
+/**
+ * Color conversion utilities
+ * @param color
+ * @returns
+ */
 
 /**
  * Convert a color value to iOS UIColor
@@ -26,9 +28,9 @@ export function toAndroidColor(color: ChartColor | undefined): number | undefine
   return c?.android;
 }
 
-// ============================================================================
-// iOS Easing Options
-// ============================================================================
+/**
+ * iOS easing options
+ */
 
 /**
  * Easing option map for iOS ChartEasingOption enum
@@ -74,9 +76,11 @@ export function parseEasingIOS(easing: string): number {
   return EASING_MAP_IOS[easing] ?? 0;
 }
 
-// ============================================================================
-// Chart Mode Parsers (iOS)
-// ============================================================================
+/**
+ * Chart mode parsers
+ * @param mode
+ * @returns
+ */
 
 /**
  * Parse line chart mode string to iOS enum value

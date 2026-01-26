@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { parseEasingIOS, parseLineChartModeIOS, parseScatterShapeIOS } from './utils';
+import { parseEasingIOS, parseLineChartModeIOS, parseScatterShapeIOS, toUIColor, toAndroidColor } from './utils';
 
 // Mock @nativescript/core
 vi.mock('@nativescript/core', () => {
@@ -7,8 +7,8 @@ vi.mock('@nativescript/core', () => {
     public ios: any;
     public android: number;
     constructor(value: string | number) {
-      this.ios = {};
-      this.android = typeof value === 'number' ? value : 0xffffffff;
+      this.ios = { mockUIColor: true };
+      this.android = typeof value === 'number' ? value : 0xff000000;
     }
   }
 
@@ -243,5 +243,179 @@ describe('parseScatterShapeIOS', () => {
     it('should return 0 for lowercase shape', () => {
       expect(parseScatterShapeIOS('circle')).toBe(0);
     });
+
+    it('should return 0 for mixed case shape', () => {
+      expect(parseScatterShapeIOS('Circle')).toBe(0);
+    });
+
+    it('should return 0 for null-like values', () => {
+      expect(parseScatterShapeIOS(null as any)).toBe(0);
+      expect(parseScatterShapeIOS(undefined as any)).toBe(0);
+    });
+  });
+});
+
+/**
+ * Color Conversion Utilities
+ */
+
+describe('toUIColor', () => {
+  describe('valid colors', () => {
+    it('should convert hex color string to UIColor', () => {
+      const result = toUIColor('#FF0000');
+      expect(result).toBeDefined();
+      expect(result?.mockUIColor).toBe(true);
+    });
+
+    it('should convert short hex color', () => {
+      const result = toUIColor('#F00');
+      expect(result).toBeDefined();
+    });
+
+    it('should convert hex with alpha', () => {
+      const result = toUIColor('#80FF0000');
+      expect(result).toBeDefined();
+    });
+
+    it('should convert named color', () => {
+      const result = toUIColor('red');
+      expect(result).toBeDefined();
+    });
+
+    it('should convert rgb format', () => {
+      const result = toUIColor('rgb(255, 0, 0)');
+      expect(result).toBeDefined();
+    });
+
+    it('should convert rgba format', () => {
+      const result = toUIColor('rgba(255, 0, 0, 0.5)');
+      expect(result).toBeDefined();
+    });
+
+    it('should convert number color', () => {
+      const result = toUIColor(0xff0000);
+      expect(result).toBeDefined();
+    });
+  });
+
+  describe('undefined/null handling', () => {
+    it('should return undefined for undefined input', () => {
+      expect(toUIColor(undefined)).toBeUndefined();
+    });
+
+    it('should return undefined for null input', () => {
+      expect(toUIColor(null as any)).toBeUndefined();
+    });
+  });
+});
+
+describe('toAndroidColor', () => {
+  describe('valid colors', () => {
+    it('should convert hex color string to Android color int', () => {
+      const result = toAndroidColor('#FF0000');
+      expect(result).toBeDefined();
+      expect(typeof result).toBe('number');
+    });
+
+    it('should convert short hex color', () => {
+      const result = toAndroidColor('#F00');
+      expect(result).toBeDefined();
+      expect(typeof result).toBe('number');
+    });
+
+    it('should convert hex with alpha', () => {
+      const result = toAndroidColor('#80FF0000');
+      expect(result).toBeDefined();
+    });
+
+    it('should convert named color', () => {
+      const result = toAndroidColor('blue');
+      expect(result).toBeDefined();
+    });
+
+    it('should convert rgb format', () => {
+      const result = toAndroidColor('rgb(0, 255, 0)');
+      expect(result).toBeDefined();
+    });
+
+    it('should convert rgba format', () => {
+      const result = toAndroidColor('rgba(0, 255, 0, 0.8)');
+      expect(result).toBeDefined();
+    });
+
+    it('should return number directly for number input', () => {
+      const result = toAndroidColor(0xff00ff00);
+      expect(result).toBeDefined();
+      expect(typeof result).toBe('number');
+    });
+  });
+
+  describe('undefined/null handling', () => {
+    it('should return undefined for undefined input', () => {
+      expect(toAndroidColor(undefined)).toBeUndefined();
+    });
+
+    it('should return undefined for null input', () => {
+      expect(toAndroidColor(null as any)).toBeUndefined();
+    });
+  });
+});
+
+/**
+ * Additional Edge Case Tests
+ */
+
+describe('parseEasingIOS edge cases', () => {
+  it('should handle numeric string input', () => {
+    expect(parseEasingIOS('123')).toBe(0);
+  });
+
+  it('should handle special characters', () => {
+    expect(parseEasingIOS('Ease-In-Quad')).toBe(0);
+  });
+
+  it('should handle whitespace', () => {
+    expect(parseEasingIOS(' Linear ')).toBe(0);
+    expect(parseEasingIOS('Linear ')).toBe(0);
+  });
+
+  it('should be case sensitive', () => {
+    expect(parseEasingIOS('LINEAR')).toBe(0);
+    expect(parseEasingIOS('linear')).toBe(0);
+    expect(parseEasingIOS('easeInQuad')).toBe(0);
+  });
+});
+
+describe('parseLineChartModeIOS edge cases', () => {
+  it('should handle mixed case input', () => {
+    expect(parseLineChartModeIOS('Linear')).toBe(0);
+    expect(parseLineChartModeIOS('Stepped')).toBe(0);
+  });
+
+  it('should handle partial matches', () => {
+    expect(parseLineChartModeIOS('LINE')).toBe(0);
+    expect(parseLineChartModeIOS('CUBIC')).toBe(0);
+  });
+
+  it('should handle whitespace', () => {
+    expect(parseLineChartModeIOS(' LINEAR')).toBe(0);
+    expect(parseLineChartModeIOS('LINEAR ')).toBe(0);
+  });
+});
+
+describe('parseScatterShapeIOS edge cases', () => {
+  it('should handle partial matches', () => {
+    expect(parseScatterShapeIOS('SQ')).toBe(0);
+    expect(parseScatterShapeIOS('CIRC')).toBe(0);
+  });
+
+  it('should handle similar but wrong values', () => {
+    expect(parseScatterShapeIOS('SQUARES')).toBe(0);
+    expect(parseScatterShapeIOS('CIRCLES')).toBe(0);
+    expect(parseScatterShapeIOS('TRIANGLES')).toBe(0);
+  });
+
+  it('should handle lowercase x', () => {
+    expect(parseScatterShapeIOS('x')).toBe(0);
   });
 });
