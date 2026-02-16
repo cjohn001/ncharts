@@ -1,3 +1,13 @@
+## 1.0.2 (2026-02-16)
+
+### 🚀 Features
+
+- support valueTextColor and textColor to customize text label color ([#2](https://github.com/nstudio/ncharts/pull/2))
+
+### ❤️ Thank You
+
+- Nathan Walker
+
 ## 1.0.1 (2026-01-26)
 
 ### 🩹 Fixes
