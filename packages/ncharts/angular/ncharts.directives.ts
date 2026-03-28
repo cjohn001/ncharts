@@ -20,7 +20,6 @@ export abstract class ChartBaseDirective implements OnDestroy, AfterViewInit {
   logEnabled = input<boolean>();
   noDataText = input<string>();
   noDataTextColor = input<ChartColor>();
-  touchEnabled = input<boolean>();
   dragDecelerationEnabled = input<boolean>();
   dragDecelerationFrictionCoef = input<number>();
   highlightPerTapEnabled = input<boolean>();
@@ -83,13 +82,6 @@ export abstract class ChartBaseDirective implements OnDestroy, AfterViewInit {
     });
 
     effect(() => {
-      const value = this.touchEnabled();
-      if (this.initialized && value !== undefined) {
-        this.chart.touchEnabled = value;
-      }
-    });
-
-    effect(() => {
       const value = this.dragDecelerationEnabled();
       if (this.initialized && value !== undefined) {
         this.chart.dragDecelerationEnabled = value;
@@ -100,13 +92,6 @@ export abstract class ChartBaseDirective implements OnDestroy, AfterViewInit {
       const value = this.dragDecelerationFrictionCoef();
       if (this.initialized && value !== undefined) {
         this.chart.dragDecelerationFrictionCoef = value;
-      }
-    });
-
-    effect(() => {
-      const value = this.highlightPerTapEnabled();
-      if (this.initialized && value !== undefined) {
-        this.chart.highlightPerTapEnabled = value;
       }
     });
 
@@ -213,17 +198,11 @@ export abstract class ChartBaseDirective implements OnDestroy, AfterViewInit {
     const noDataTextColor = this.noDataTextColor();
     if (noDataTextColor) this.chart.noDataTextColor = noDataTextColor;
 
-    const touchEnabled = this.touchEnabled();
-    if (touchEnabled !== undefined) this.chart.touchEnabled = touchEnabled;
-
     const dragDecelerationEnabled = this.dragDecelerationEnabled();
     if (dragDecelerationEnabled !== undefined) this.chart.dragDecelerationEnabled = dragDecelerationEnabled;
 
     const dragDecelerationFrictionCoef = this.dragDecelerationFrictionCoef();
     if (dragDecelerationFrictionCoef !== undefined) this.chart.dragDecelerationFrictionCoef = dragDecelerationFrictionCoef;
-
-    const highlightPerTapEnabled = this.highlightPerTapEnabled();
-    if (highlightPerTapEnabled !== undefined) this.chart.highlightPerTapEnabled = highlightPerTapEnabled;
 
     const chartDescription = this.chartDescription();
     if (chartDescription) this.chart.chartDescription = chartDescription;
@@ -275,12 +254,8 @@ export abstract class BarLineChartBaseDirective extends ChartBaseDirective {
   maxVisibleValueCount = input<number>();
   autoScaleMinMaxEnabled = input<boolean>();
   keepPositionOnRotation = input<boolean>();
-  highlightPerDragEnabled = input<boolean>();
-  scaleEnabled = input<boolean>();
   scaleXEnabled = input<boolean>();
   scaleYEnabled = input<boolean>();
-  dragEnabled = input<boolean>();
-  pinchZoom = input<boolean>();
   doubleTapToZoomEnabled = input<boolean>();
   yAxis = input<YAxisConfigDual>();
 
@@ -359,20 +334,6 @@ export abstract class BarLineChartBaseDirective extends ChartBaseDirective {
     });
 
     effect(() => {
-      const value = this.highlightPerDragEnabled();
-      if (this.initialized && value !== undefined) {
-        this.chart.highlightPerDragEnabled = value;
-      }
-    });
-
-    effect(() => {
-      const value = this.scaleEnabled();
-      if (this.initialized && value !== undefined) {
-        this.chart.scaleEnabled = value;
-      }
-    });
-
-    effect(() => {
       const value = this.scaleXEnabled();
       if (this.initialized && value !== undefined) {
         this.chart.scaleXEnabled = value;
@@ -383,20 +344,6 @@ export abstract class BarLineChartBaseDirective extends ChartBaseDirective {
       const value = this.scaleYEnabled();
       if (this.initialized && value !== undefined) {
         this.chart.scaleYEnabled = value;
-      }
-    });
-
-    effect(() => {
-      const value = this.dragEnabled();
-      if (this.initialized && value !== undefined) {
-        this.chart.dragEnabled = value;
-      }
-    });
-
-    effect(() => {
-      const value = this.pinchZoom();
-      if (this.initialized && value !== undefined) {
-        this.chart.pinchZoom = value;
       }
     });
 
@@ -449,23 +396,11 @@ export abstract class BarLineChartBaseDirective extends ChartBaseDirective {
     const keepPositionOnRotation = this.keepPositionOnRotation();
     if (keepPositionOnRotation !== undefined) this.chart.keepPositionOnRotation = keepPositionOnRotation;
 
-    const highlightPerDragEnabled = this.highlightPerDragEnabled();
-    if (highlightPerDragEnabled !== undefined) this.chart.highlightPerDragEnabled = highlightPerDragEnabled;
-
-    const scaleEnabled = this.scaleEnabled();
-    if (scaleEnabled !== undefined) this.chart.scaleEnabled = scaleEnabled;
-
     const scaleXEnabled = this.scaleXEnabled();
     if (scaleXEnabled !== undefined) this.chart.scaleXEnabled = scaleXEnabled;
 
     const scaleYEnabled = this.scaleYEnabled();
     if (scaleYEnabled !== undefined) this.chart.scaleYEnabled = scaleYEnabled;
-
-    const dragEnabled = this.dragEnabled();
-    if (dragEnabled !== undefined) this.chart.dragEnabled = dragEnabled;
-
-    const pinchZoom = this.pinchZoom();
-    if (pinchZoom !== undefined) this.chart.pinchZoom = pinchZoom;
 
     const doubleTapToZoomEnabled = this.doubleTapToZoomEnabled();
     if (doubleTapToZoomEnabled !== undefined) this.chart.doubleTapToZoomEnabled = doubleTapToZoomEnabled;

@@ -1,7 +1,7 @@
 /**
  * PieChart - iOS Implementation
  */
-import { PieChartBase, ChartAnimation, LegendConfig, XAxisConfig, ChartDescription, MarkerConfig, Highlight, PieDataSetConfig, nchartsLog, nchartsError } from '../common';
+import { PieChartBase, ChartAnimation, LegendConfig, XAxisConfig, ChartDescription, MarkerConfig, Highlight, PieDataSetConfig, nchartsLog, nchartsError, animationProperty } from '../common';
 import { toUIColor, parseEasingIOS } from './utils';
 import { applyNoDataTextColorIOS, applyLegendIOS, applyXAxisIOS, applyDescriptionIOS } from './style-helpers.ios';
 
@@ -125,6 +125,7 @@ function applyPieDataSetConfig(dataSet: PieChartDataSet, config: PieDataSetConfi
 export class PieChart extends PieChartBase {
   private _native: PieChartView | null = null;
   private _delegate: PieChartViewDelegateImpl | null = null;
+  private _retainedChartObjects: Array<any> = [];
 
   createNativeView(): any {
     nchartsLog('[ncharts] PieChart.createNativeView()');
@@ -266,6 +267,7 @@ export class PieChart extends PieChartBase {
   }
 
   disposeNativeView(): void {
+    this._retainedChartObjects.length = 0;
     this._delegate = null;
     this._native = null;
     this._nativeChart = null;
@@ -414,7 +416,7 @@ export class PieChart extends PieChartBase {
     applyLegendIOS(this._native, legend);
   }
   protected _applyXAxis(xAxis: XAxisConfig): void {
-    applyXAxisIOS(this._native, xAxis);
+    applyXAxisIOS(this._native, xAxis, this._retainedChartObjects);
   }
   protected _applyDescription(description: ChartDescription): void {
     applyDescriptionIOS(this._native, description);
