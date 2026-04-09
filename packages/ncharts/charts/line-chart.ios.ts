@@ -365,6 +365,18 @@ export class LineChart extends LineChartBase {
     }
   }
 
+  [highlightPerTapEnabledProperty.setNative](value: boolean) {
+    if (this._native) {
+      this._native.highlightPerTapEnabled = value;
+    }
+  }
+
+  [highlightPerDragEnabledProperty.setNative](value: boolean) {
+    if (this._native) {
+      this._native.highlightPerDragEnabled = value;
+    }
+  }
+
   [dragEnabledProperty.setNative](value: boolean) {
     if (this._native) {
       this._native.dragEnabled = value;
@@ -380,18 +392,6 @@ export class LineChart extends LineChartBase {
   [pinchZoomProperty.setNative](value: boolean) {
     if (this._native) {
       this._native.pinchZoomEnabled = value;
-    }
-  }
-
-  [highlightPerDragEnabledProperty.setNative](value: boolean) {
-    if (this._native) {
-      this._native.highlightPerDragEnabled = value;
-    }
-  }
-
-  [highlightPerTapEnabledProperty.setNative](value: boolean) {
-    if (this._native) {
-      this._native.highlightPerTapEnabled = value;
     }
   }
 }

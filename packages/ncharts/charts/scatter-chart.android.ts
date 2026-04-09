@@ -1,7 +1,7 @@
 /**
  * ScatterChart - Android Implementation
  */
-import { ScatterChartBase, ChartAnimation, LegendConfig, XAxisConfig, YAxisConfigDual, ChartDescription, MarkerConfig, Highlight, ScatterDataSetConfig, nchartsLog, nchartsError, animationProperty } from '../common';
+import { ScatterChartBase, ChartAnimation, LegendConfig, XAxisConfig, YAxisConfigDual, ChartDescription, MarkerConfig, Highlight, ScatterDataSetConfig, nchartsLog, nchartsError, animationProperty, extraOffsetsProperty, ViewPortOffset } from '../common';
 import { toAndroidColor } from './utils';
 import { applyNoDataTextColorAndroid, applyLegendAndroid, applyXAxisAndroid, applyYAxisDualAndroid, applyDescriptionAndroid } from './style-helpers.android';
 
@@ -236,5 +236,12 @@ export class ScatterChart extends ScatterChartBase {
 
   protected _fitScreen(): void {
     this._native?.fitScreen();
+  }
+
+  [extraOffsetsProperty.setNative](value: ViewPortOffset) {
+    if (this._native && value) {
+      this._native.setExtraOffsets(value.left, value.top, value.right, value.bottom);
+      this._native.invalidate();
+    }
   }
 }

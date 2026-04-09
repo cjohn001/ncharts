@@ -1,4 +1,4 @@
-import { BarDataSetConfig } from '@nstudio/ncharts/common';
+import { BarDataSetConfig } from '../../common';
 import { Utils } from '@nativescript/core';
 
 @NativeClass()

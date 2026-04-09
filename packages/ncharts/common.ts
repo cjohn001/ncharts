@@ -526,6 +526,7 @@ export abstract class CombinedChartBase extends BarLineChartViewBase {
   public data: CombinedChartData | undefined;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////
 // Data property for all chart types
 export const dataProperty = new Property<ChartViewBase, any>({
   name: 'data',
@@ -607,6 +608,15 @@ export const highlightPerTapEnabledProperty = new Property<ChartViewBase, boolea
 });
 highlightPerTapEnabledProperty.register(ChartViewBase);
 
+// extraOffsets property
+export const extraOffsetsProperty = new Property<ChartViewBase, ViewPortOffset>({
+  name: 'extraOffsets',
+  defaultValue: null,
+  affectsLayout: false,
+});
+extraOffsetsProperty.register(ChartViewBase);
+
+////////////////////////////////////////////////////////////////////////////////////////
 // YAxis property
 export const yAxisProperty = new Property<BarLineChartViewBase, YAxisConfigDual>({
   name: 'yAxis',
@@ -615,14 +625,6 @@ export const yAxisProperty = new Property<BarLineChartViewBase, YAxisConfigDual>
   },
 });
 yAxisProperty.register(BarLineChartViewBase);
-
-// extraOffsets property
-export const extraOffsetsProperty = new Property<BarLineChartViewBase, ViewPortOffset>({
-  name: 'extraOffsets',
-  defaultValue: null,
-  affectsLayout: false,
-});
-extraOffsetsProperty.register(BarLineChartViewBase);
 
 // Drag enabled property
 export const dragEnabledProperty = new Property<BarLineChartViewBase, boolean>({
@@ -656,14 +658,12 @@ export const highlightPerDragEnabledProperty = new Property<BarLineChartViewBase
 });
 highlightPerDragEnabledProperty.register(BarLineChartViewBase);
 
+////////////////////////////////////////////////////////////////////////////////////////
 // Pie Chart specific properties
 export const drawHoleProperty = new Property<PieChartBase, boolean>({
   name: 'drawHole',
   defaultValue: true,
   valueConverter: (v) => String(v) === 'true',
-  valueChanged(target, oldValue, newValue) {
-    (target as any).onDrawHoleChange?.();
-  },
 });
 drawHoleProperty.register(PieChartBase);
 
@@ -671,11 +671,100 @@ export const holeRadiusProperty = new Property<PieChartBase, number>({
   name: 'holeRadius',
   defaultValue: 50,
   valueConverter: (v) => parseFloat(v),
-  valueChanged(target, oldValue, newValue) {
-    (target as any).onHoleRadiusChange?.();
-  },
 });
 holeRadiusProperty.register(PieChartBase);
+
+export const transparentCircleRadiusProperty = new Property<PieChartBase, number>({
+  name: 'transparentCircleRadius',
+  defaultValue: 55,
+  valueConverter: (v) => parseFloat(v),
+});
+transparentCircleRadiusProperty.register(PieChartBase);
+
+export const holeColorProperty = new Property<PieChartBase, ChartColor>({
+  name: 'holeColor',
+  defaultValue: undefined,
+  valueConverter: (v) => v,
+});
+holeColorProperty.register(PieChartBase);
+
+export const transparentCircleColorProperty = new Property<PieChartBase, ChartColor>({
+  name: 'transparentCircleColor',
+  defaultValue: undefined,
+  valueConverter: (v) => v,
+});
+transparentCircleColorProperty.register(PieChartBase);
+
+export const drawCenterTextProperty = new Property<PieChartBase, boolean>({
+  name: 'drawCenterText',
+  defaultValue: false,
+  valueConverter: (v) => String(v) === 'true',
+});
+drawCenterTextProperty.register(PieChartBase);
+
+export const centerTextProperty = new Property<PieChartBase, string>({
+  name: 'centerText',
+  defaultValue: '',
+  valueConverter: (v) => v,
+});
+centerTextProperty.register(PieChartBase);
+
+export const centerTextColorProperty = new Property<PieChartBase, ChartColor>({
+  name: 'centerTextColor',
+  defaultValue: undefined,
+  valueConverter: (v) => v,
+});
+centerTextColorProperty.register(PieChartBase);
+
+export const centerTextSizeProperty = new Property<PieChartBase, number>({
+  name: 'centerTextSize',
+  defaultValue: 12,
+  valueConverter: (v) => parseFloat(v),
+});
+centerTextSizeProperty.register(PieChartBase);
+
+export const drawSliceTextProperty = new Property<PieChartBase, boolean>({
+  name: 'drawSliceText',
+  defaultValue: false,
+  valueConverter: (v) => String(v) === 'true',
+});
+drawSliceTextProperty.register(PieChartBase);
+
+export const sliceTextSizeProperty = new Property<PieChartBase, number>({
+  name: 'sliceTextSize',
+  defaultValue: 13,
+  valueConverter: (v) => parseFloat(v),
+});
+sliceTextSizeProperty.register(PieChartBase);
+
+export const sliceTextColorProperty = new Property<PieChartBase, ChartColor>({
+  name: 'sliceTextColor',
+  defaultValue: undefined,
+  valueConverter: (v) => v,
+});
+sliceTextColorProperty.register(PieChartBase);
+
+export const usePercentValuesProperty = new Property<PieChartBase, boolean>({
+  name: 'usePercentValues',
+  defaultValue: false,
+  valueConverter: (v) => String(v) === 'true',
+});
+usePercentValuesProperty.register(PieChartBase);
+
+export const maxAngleProperty = new Property<PieChartBase, number>({
+  name: 'maxAngle',
+  defaultValue: 360,
+  valueConverter: (v) => parseFloat(v),
+});
+maxAngleProperty.register(PieChartBase);
+
+////////////////////////////////////////////////////////////////////////////////////////
+export const rotationEnabledProperty = new Property<PieRadarChartViewBase, boolean>({
+  name: 'rotationEnabled',
+  defaultValue: true,
+  valueConverter: (v) => String(v) === 'true',
+});
+rotationEnabledProperty.register(PieRadarChartViewBase);
 
 export const rotationAngleProperty = new Property<PieRadarChartViewBase, number>({
   name: 'rotationAngle',

@@ -1,7 +1,7 @@
 /**
  * RadarChart - iOS Implementation
  */
-import { RadarChartBase, ChartAnimation, LegendConfig, XAxisConfig, ChartDescription, MarkerConfig, Highlight, RadarDataSetConfig, nchartsLog, nchartsError, animationProperty } from '../common';
+import { RadarChartBase, ChartAnimation, LegendConfig, XAxisConfig, ChartDescription, MarkerConfig, Highlight, RadarDataSetConfig, nchartsLog, nchartsError, animationProperty, extraOffsetsProperty, ViewPortOffset, rotationEnabledProperty } from '../common';
 import { toUIColor, parseEasingIOS } from './utils';
 import { applyNoDataTextColorIOS, applyLegendIOS, applyXAxisIOS, applyYAxisIOS, applyDescriptionIOS } from './style-helpers.ios';
 
@@ -253,4 +253,18 @@ export class RadarChart extends RadarChartBase {
     applyDescriptionIOS(this._native, description);
   }
   protected _applyMarker(marker: MarkerConfig): void {}
+
+  [extraOffsetsProperty.setNative](value: ViewPortOffset) {
+    if (this._native && value) {
+      this._native.setExtraOffsetsWithLeftTopRightBottom(value.left, value.top, value.right, value.bottom);
+      this._native.notifyDataSetChanged();
+      this._native.setNeedsDisplay();
+    }
+  }
+
+  [rotationEnabledProperty.setNative](value: boolean) {
+    if (!this._native) return;
+    this._native.rotationEnabled = value;
+    this._native.setNeedsDisplay();
+  }
 }

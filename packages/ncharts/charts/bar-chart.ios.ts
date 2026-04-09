@@ -3,7 +3,7 @@
  */
 import { BarChartBase, HorizontalBarChartBase, ChartAnimation, LegendConfig, XAxisConfig, YAxisConfigDual, ChartDescription, MarkerConfig, Highlight, BarDataSetConfig, nchartsLog, nchartsError, ViewPortOffset, extraOffsetsProperty, animationProperty, touchEnabledProperty, dragEnabledProperty, scaleEnabledProperty, pinchZoomProperty, highlightPerDragEnabledProperty, highlightPerTapEnabledProperty } from '../common';
 import { toUIColor, parseEasingIOS } from './utils';
-import { applyNoDataTextColorIOS, applyLegendIOS, applyXAxisIOS, applyYAxisDualIOS, applyDescriptionIOS } from './style-helpers.ios';
+import { applyNoDataTextColorIOS, applyLegendIOS, applyXAxisIOS, applyYAxisDualIOS, applyDescriptionIOS, applyMarkerIOS } from './style-helpers.ios';
 import { NSBarChartRenderer } from './renderers/bar-chart-renderer.ios';
 import { NSSuffixValueFormatter } from './formatters/suffix-value-formatter.ios';
 import { ChartPagingDetector } from './chart-paging-detector/chart-paging-detector';
@@ -144,7 +144,7 @@ export class BarChart extends BarChartBase {
     if (this.xAxis) this._applyXAxis(this.xAxis);
     if (this.yAxis) this._applyYAxis(this.yAxis);
     if (this.chartDescription) this._applyDescription(this.chartDescription);
-
+    if (this.marker) this._applyMarker(this.marker);
     if (this.data) this.applyData();
   }
 
@@ -201,11 +201,20 @@ export class BarChart extends BarChartBase {
           entry = BarChartDataEntry.alloc().initWithXYValues(index, yVals as any);
         } else {
           const x = value.x ?? index;
-          if (Array.isArray(value.y)) {
-            // Stacked bar with x
-            entry = BarChartDataEntry.alloc().initWithXYValues(x, value.y as any);
+          if (value.marker) {
+            if (Array.isArray(value.y)) {
+              // Stacked bar with x
+              entry = BarChartDataEntry.alloc().initWithXYValuesData(x, value.y as any, value.marker);
+            } else {
+              entry = BarChartDataEntry.alloc().initWithXYData(x, value.y, value.marker);
+            }
           } else {
-            entry = BarChartDataEntry.alloc().initWithXY(x, value.y);
+            if (Array.isArray(value.y)) {
+              // Stacked bar with x
+              entry = BarChartDataEntry.alloc().initWithXYValues(x, value.y as any);
+            } else {
+              entry = BarChartDataEntry.alloc().initWithXY(x, value.y);
+            }
           }
         }
         entries.push(entry);
@@ -306,7 +315,10 @@ export class BarChart extends BarChartBase {
   protected _applyDescription(description: ChartDescription): void {
     applyDescriptionIOS(this._native, description);
   }
-  protected _applyMarker(marker: MarkerConfig): void {}
+
+  protected _applyMarker(marker: MarkerConfig): void {
+    applyMarkerIOS(this._native, marker, this._retainedChartObjects);
+  }
 
   protected _moveViewToX(xValue: number): void {
     this._native?.moveViewToX(xValue);

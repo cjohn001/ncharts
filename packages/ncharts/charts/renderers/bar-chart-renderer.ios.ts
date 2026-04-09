@@ -1,4 +1,4 @@
-import { BarDataSetConfig } from '@nstudio/ncharts/common';
+import { BarDataSetConfig } from '../../common';
 
 @NativeClass()
 export class NSBarChartRenderer extends BarChartRenderer {

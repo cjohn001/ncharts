@@ -3,7 +3,7 @@
  */
 import { BarChartBase, HorizontalBarChartBase, ChartAnimation, LegendConfig, XAxisConfig, YAxisConfigDual, ChartDescription, MarkerConfig, Highlight, BarDataSetConfig, nchartsLog, nchartsError, ViewPortOffset, extraOffsetsProperty, animationProperty, touchEnabledProperty, dragEnabledProperty, scaleEnabledProperty, pinchZoomProperty, highlightPerDragEnabledProperty, highlightPerTapEnabledProperty } from '../common';
 import { toAndroidColor } from './utils';
-import { applyNoDataTextColorAndroid, applyLegendAndroid, applyXAxisAndroid, applyYAxisDualAndroid, applyDescriptionAndroid } from './style-helpers.android';
+import { applyNoDataTextColorAndroid, applyLegendAndroid, applyXAxisAndroid, applyYAxisDualAndroid, applyDescriptionAndroid, applyMarkerAndroid } from './style-helpers.android';
 import { NSBarChartRenderer } from './renderers/bar-chart-renderer.android';
 import { NSSuffixValueFormatter } from './formatters/suffix-value-formatter.android';
 import { ChartPagingDetector } from './chart-paging-detector/chart-paging-detector';
@@ -128,8 +128,8 @@ export class BarChart extends BarChartBase {
     if (this.xAxis) this._applyXAxis(this.xAxis);
     if (this.yAxis) this._applyYAxis(this.yAxis);
     if (this.chartDescription) this._applyDescription(this.chartDescription);
-
     if (this.data) this.applyData();
+    if (this.marker) this._applyMarker(this.marker);
   }
 
   disposeNativeView(): void {
@@ -157,7 +157,9 @@ export class BarChart extends BarChartBase {
 
     // reset highlights and marker to prevent crashes from markers to be drawn on removed data
     instance.highlightValues(null);
-    instance.setMarker(null);
+
+    // clear any retained data objects / formatters
+    this._retainedDataObjects.length = 0;
 
     // clear any retained data objects / formatters
     this._retainedDataObjects.length = 0;
@@ -180,15 +182,28 @@ export class BarChart extends BarChartBase {
           entry = new com.github.mikephil.charting.data.BarEntry(index, yVals);
         } else {
           const x = value.x ?? index;
-          if (Array.isArray(value.y)) {
-            // Stacked bar with x
-            const yVals = Array.create('float', value.y.length);
-            value.y.forEach((v: number, i: number) => {
-              yVals[i] = v;
-            });
-            entry = new com.github.mikephil.charting.data.BarEntry(x, yVals);
+          if (value.marker) {
+            if (Array.isArray(value.y)) {
+              // Stacked bar with x
+              const yVals = Array.create('float', value.y.length);
+              value.y.forEach((v: number, i: number) => {
+                yVals[i] = v;
+              });
+              entry = new com.github.mikephil.charting.data.BarEntry(x, yVals, value.marker);
+            } else {
+              entry = new com.github.mikephil.charting.data.BarEntry(x, value.y, value.marker);
+            }
           } else {
-            entry = new com.github.mikephil.charting.data.BarEntry(x, value.y);
+            if (Array.isArray(value.y)) {
+              // Stacked bar with x
+              const yVals = Array.create('float', value.y.length);
+              value.y.forEach((v: number, i: number) => {
+                yVals[i] = v;
+              });
+              entry = new com.github.mikephil.charting.data.BarEntry(x, yVals);
+            } else {
+              entry = new com.github.mikephil.charting.data.BarEntry(x, value.y);
+            }
           }
         }
         entries.add(entry);
@@ -278,7 +293,9 @@ export class BarChart extends BarChartBase {
   protected _applyDescription(description: ChartDescription): void {
     applyDescriptionAndroid(this._native, description);
   }
-  protected _applyMarker(marker: MarkerConfig): void {}
+  protected _applyMarker(marker: MarkerConfig): void {
+    applyMarkerAndroid(this._native, marker, this._retainedChartObjects);
+  }
 
   protected _moveViewToX(xValue: number): void {
     this._native?.moveViewToX(xValue);

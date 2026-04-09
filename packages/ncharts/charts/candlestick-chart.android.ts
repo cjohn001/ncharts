@@ -1,7 +1,7 @@
 /**
  * CandleStickChart - Android Implementation
  */
-import { CandleStickChartBase, ChartAnimation, LegendConfig, XAxisConfig, YAxisConfigDual, ChartDescription, MarkerConfig, Highlight, CandleDataSetConfig, nchartsLog, nchartsError, animationProperty } from '../common';
+import { CandleStickChartBase, ChartAnimation, LegendConfig, XAxisConfig, YAxisConfigDual, ChartDescription, MarkerConfig, Highlight, CandleDataSetConfig, nchartsLog, nchartsError, animationProperty, ViewPortOffset, extraOffsetsProperty } from '../common';
 import { toAndroidColor } from './utils';
 import { applyNoDataTextColorAndroid, applyLegendAndroid, applyXAxisAndroid, applyYAxisDualAndroid, applyDescriptionAndroid } from './style-helpers.android';
 
@@ -247,5 +247,12 @@ export class CandleStickChart extends CandleStickChartBase {
 
   protected _fitScreen(): void {
     this._native?.fitScreen();
+  }
+
+  [extraOffsetsProperty.setNative](value: ViewPortOffset) {
+    if (this._native && value) {
+      this._native.setExtraOffsets(value.left, value.top, value.right, value.bottom);
+      this._native.invalidate();
+    }
   }
 }

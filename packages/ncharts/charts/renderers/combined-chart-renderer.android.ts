@@ -1,4 +1,4 @@
-import { BarDataSetConfig, PlotBandConfig } from '@nstudio/ncharts/common';
+import { BarDataSetConfig, PlotBandConfig } from '../../common';
 import { NSBarChartRenderer } from './bar-chart-renderer.android';
 import { PlotBandDrawer } from './plotband-drawer.android';
 

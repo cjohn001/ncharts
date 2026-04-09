@@ -77,7 +77,7 @@ function applyLineDataSetConfig(dataSet: com.github.mikephil.charting.data.LineD
     if (color !== undefined) dataSet.setCircleHoleColor(color);
   }
   if (config.drawCircleHole !== undefined) dataSet.setDrawCircleHole(config.drawCircleHole);
-  if (config.valueFormatter === 'number') {
+  if (config.valueFormatter === 'number' || config.valueFormatter === 'suffix' || config.valueFormatter === 'percent') {
     const vf = NSSuffixValueFormatter.initWithPattern(config.valueFormatterPattern);
     dataSet.setValueFormatter(vf);
     retainedDataObjects.push(vf);
@@ -336,6 +336,18 @@ export class LineChart extends LineChartBase {
     }
   }
 
+  [highlightPerTapEnabledProperty.setNative](value: boolean) {
+    if (this._native) {
+      this._native.setHighlightPerTapEnabled(value);
+    }
+  }
+
+  [highlightPerDragEnabledProperty.setNative](value: boolean) {
+    if (this._native) {
+      this._native.setHighlightPerDragEnabled(value);
+    }
+  }
+
   [dragEnabledProperty.setNative](value: boolean) {
     if (this._native) {
       this._native.setDragEnabled(value);
@@ -351,18 +363,6 @@ export class LineChart extends LineChartBase {
   [pinchZoomProperty.setNative](value: boolean) {
     if (this._native) {
       this._native.setPinchZoom(value);
-    }
-  }
-
-  [highlightPerDragEnabledProperty.setNative](value: boolean) {
-    if (this._native) {
-      this._native.setHighlightPerDragEnabled(value);
-    }
-  }
-
-  [highlightPerTapEnabledProperty.setNative](value: boolean) {
-    if (this._native) {
-      this._native.setHighlightPerTapEnabled(value);
     }
   }
 }

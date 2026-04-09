@@ -1,5 +1,5 @@
 import { Color } from '@nativescript/core';
-import { PlotBandConfig } from '@nstudio/ncharts/common';
+import { PlotBandConfig } from '../../common';
 
 type HAlign = 'LEFT' | 'CENTER' | 'RIGHT';
 type VAlign = 'TOP' | 'MIDDLE' | 'BOTTOM';

@@ -1,7 +1,7 @@
 /**
  * ScatterChart - iOS Implementation
  */
-import { ScatterChartBase, ChartAnimation, LegendConfig, XAxisConfig, YAxisConfigDual, ChartDescription, MarkerConfig, Highlight, ScatterDataSetConfig, nchartsLog, nchartsError, animationProperty } from '../common';
+import { ScatterChartBase, ChartAnimation, LegendConfig, XAxisConfig, YAxisConfigDual, ChartDescription, MarkerConfig, Highlight, ScatterDataSetConfig, nchartsLog, nchartsError, animationProperty, extraOffsetsProperty, ViewPortOffset } from '../common';
 import { toUIColor, parseEasingIOS, parseScatterShapeIOS } from './utils';
 import { applyNoDataTextColorIOS, applyLegendIOS, applyXAxisIOS, applyYAxisDualIOS, applyDescriptionIOS } from './style-helpers.ios';
 
@@ -261,5 +261,13 @@ export class ScatterChart extends ScatterChartBase {
 
   protected _fitScreen(): void {
     this._native?.fitScreen();
+  }
+
+  [extraOffsetsProperty.setNative](value: ViewPortOffset) {
+    if (this._native && value) {
+      this._native.setExtraOffsetsWithLeftTopRightBottom(value.left, value.top, value.right, value.bottom);
+      this._native.notifyDataSetChanged();
+      this._native.setNeedsDisplay();
+    }
   }
 }

@@ -1,6 +1,6 @@
 import { ChartPagingDetectorBase } from './chart-paging-detector-base';
 import { ChartPagingDetectorOptions, PageHandler } from './chart-paging-detector';
-import { LineChartBase } from '@nstudio/ncharts/common';
+import { LineChartBase } from '../../common';
 
 @NativeClass()
 export class PanActionTarget extends NSObject implements UIGestureRecognizerDelegate {
